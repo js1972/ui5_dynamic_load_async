@@ -55,8 +55,31 @@ module.exports = function(grunt) {
 			options: {
 				port: 8080,
 				hostname: "localhost",
-				base: [".", "../sapui5/latest/"]
+				base: [".", "../sapui5/latest/"],
+				middleware: function(connect, options) {
+					var middleware = [];
+
+					// add a middleware to specify network latency in ms
+					middleware.push(function(req, res, next) {
+						//next();
+						setTimeout(next, 150);
+					});
+
+					middleware.push(connect.compress());
+					
+					// original middleware behavior
+					var base = options.base;
+					if (!Array.isArray(base)) {
+						base = [base];
+					}
+					base.forEach(function(path) {
+						middleware.push(connect.static(path));
+					});
+
+					return middleware;
+				}
 			},
+			server: {}
 
 			/*
 			//=====================================================================
@@ -84,7 +107,7 @@ module.exports = function(grunt) {
 			*/
 
 			// Requires the Livereload browser extension or a middleware to inject the livereload script
-			livereload: {
+			//livereload: {
 				/*
 				options: {
 					middleware: function(connect, options) {
@@ -104,7 +127,7 @@ module.exports = function(grunt) {
 					}
 				}
 				*/
-			}
+			//}
 		}
 	});
 
@@ -115,14 +138,14 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-open");
 	grunt.loadNpmTasks("grunt-contrib-connect");
-	grunt.loadNpmTasks("grunt-connect-proxy");
+	//grunt.loadNpmTasks("grunt-connect-proxy");
 
 
 	grunt.registerTask("default", ["jshint", "qunit:all", "watch"]);
 	grunt.registerTask("serve", function() {
 		grunt.task.run([
-			"configureProxies",
-			"connect:livereload",
+			//"configureProxies",
+			"connect:server",
 			"open",
 			"watch"
 		]);
