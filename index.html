@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta charset="UTF-8">
+
+		<title>ui5_async</title>
+
+		<style>
+			#spinner_container {
+				left: 50%;
+				top: 50%;
+				margin-top: 12px; /* width of spinner graphic / 2 */
+				margin-left: 12px;
+				position: absolute;
+			}
+		</style>
+
+		<script type="text/javascript" src="spin.min.js"></script>
+		<script type="text/javascript" src="application.js"></script>
+	</head>
+
+	<body class="sapUiBody" role="application" id="content">
+		<div id="spinner_container"></div>
+
+		<script>
+			/*global oApplication*/
+			/*jshint quotmark:false*/
+			//"https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
+			oApplication.load("resources/sap-ui-core.js",
+				"sap-ui-bootstrap",
+				"sap.m",
+				"sap_bluecrystal",
+				"complex",
+				'{\"sap.ui.demo\": \"./\"}',  //need to wap with single quotes here or sapui5 dies!
+				oApplication.onSAPUI5Loaded.bind(oApplication)
+			);
+		</script>
+	</body>
+</html>
